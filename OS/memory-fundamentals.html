@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-11-21 日 22:26 -->
+<!-- 2021-11-25 四 22:08 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>内存基础知识</title>
@@ -87,11 +87,38 @@ for the JavaScript code in this tag.
 </p>
 </div>
 
+
 <p>
 可以看到，存储器在计算机运行时，存储了控制器运行时的指令，也存储了运算器的操作数等，是整个体系中核心的一部分。
 </p>
 
+<p>
+一般情况下，存储单元会独立在处理器外部，可以根据实际使用场景配置，但也有为了降成本将CPU和DDR合封在一起。
+</p>
 
+<p>
+基于上述结构，CPU怎么访问物理地址呢，直接使用物理地址会有什么问题？
+假设程序A在执行时，要使用一片20MB大小的内存，程序B要使用30MB大小的内存，如果直接使用物理地址，有以下几个问题需要解决
+</p>
+<ol class="org-ol">
+<li>在写程序A和B时，内存地址的指针应该怎么给定，在不同机器，或不同上下文环境中，可用的物理地址空间是不一样的</li>
+<li>怎么让程序A和程序B在同时运行时，内存不会互相踩踏</li>
+<li>如果内存单元中，分不出来一片完整的20MB的内存，但有好多5MB为单位的分散的内存</li>
+</ol>
+
+<p>
+由于直接使用物理内存，会有上述问题，所以有了虚拟地址的概念，即每个进程看到的都是全新的0~4GB(32位系统）的地址空间，然后使用硬件或软件维护一个虚拟地址到物理地址的映射，在简化使用的同时，最大化的使用内存。
+</p>
+
+
+<div class="figure">
+<p><img src="va_in_two_process.png" alt="va_in_two_process.png" />
+</p>
+</div>
+
+<p>
+如上图，两个进程同样的虚拟地址，映射到不同的物理地址上。
+</p>
 <div id="disqus_thread"></div>
 <script>
     var disqus_config = function () {
@@ -110,7 +137,7 @@ for the JavaScript code in this tag.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2021-11-21 日 22:26</p>
+<p class="date">Created: 2021-11-25 四 22:08</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
