@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-11-25 四 22:08 -->
+<!-- 2021-11-26 五 00:02 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>内存基础知识</title>
@@ -68,14 +68,15 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgf163522">1. 内存基础知识</a></li>
+<li><a href="#org56f7a83">1. 内存作用</a></li>
+<li><a href="#org229df5a">2. 虚拟地址和页表</a></li>
 </ul>
 </div>
 </div>
 
 
-<div id="outline-container-orgf163522" class="outline-2">
-<h2 id="orgf163522"><span class="section-number-2">1</span> 内存基础知识</h2>
+<div id="outline-container-org56f7a83" class="outline-2">
+<h2 id="org56f7a83"><span class="section-number-2">1</span> 内存作用</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 为什么要使用内存，依据冯诺依曼结构，计算机机一般以如下结构组成
@@ -105,7 +106,12 @@ for the JavaScript code in this tag.
 <li>怎么让程序A和程序B在同时运行时，内存不会互相踩踏</li>
 <li>如果内存单元中，分不出来一片完整的20MB的内存，但有好多5MB为单位的分散的内存</li>
 </ol>
+</div>
+</div>
 
+<div id="outline-container-org229df5a" class="outline-2">
+<h2 id="org229df5a"><span class="section-number-2">2</span> 虚拟地址和页表</h2>
+<div class="outline-text-2" id="text-2">
 <p>
 由于直接使用物理内存，会有上述问题，所以有了虚拟地址的概念，即每个进程看到的都是全新的0~4GB(32位系统）的地址空间，然后使用硬件或软件维护一个虚拟地址到物理地址的映射，在简化使用的同时，最大化的使用内存。
 </p>
@@ -119,6 +125,12 @@ for the JavaScript code in this tag.
 <p>
 如上图，两个进程同样的虚拟地址，映射到不同的物理地址上。
 </p>
+
+<p>
+通过虚拟地址和物理地址的映射，可以解决1和2两个问题，但是如果物理地址空间上没有一串足够大的连续内存，这时怎么办呢，此时，可以通过多级页表的方式，将多块物理地址不连续的空间，映射成一个虚拟地址连续的空间。
+</p>
+
+
 <div id="disqus_thread"></div>
 <script>
     var disqus_config = function () {
@@ -137,7 +149,7 @@ for the JavaScript code in this tag.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2021-11-25 四 22:08</p>
+<p class="date">Created: 2021-11-26 五 00:02</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
