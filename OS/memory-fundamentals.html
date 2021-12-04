@@ -3,13 +3,13 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-11-30 二 23:35 -->
+<!-- 2021-12-05 日 00:20 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>内存基础知识</title>
 <meta name="generator" content="Org mode" />
 <meta name="keywords" content="Memory DDR" />
-<link rel="stylesheet" type="text/css" href="https://gongzhitaao.org/orgcss/org.css" />
+<link href="../css/codeblock.css" rel="stylesheet">
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
@@ -118,7 +118,7 @@ for the JavaScript code in this tag.
 
 
 <div class="figure">
-<p><img src="va_in_two_process.png" alt="va_in_two_process.png" />
+<p><img src="../images/va_in_two_process.png" alt="va_in_two_process.png" />
 </p>
 </div>
 
@@ -127,9 +127,48 @@ for the JavaScript code in this tag.
 </p>
 
 <p>
-通过虚拟地址和物理地址的映射，可以解决1和2两个问题，但是如果物理地址空间上没有一串足够大的连续内存，这时怎么办呢，此时，可以通过多级页表的方式，将多块物理地址不连续的空间，映射成一个虚拟地址连续的空间。
+通过虚拟地址和物理地址的映射，可以解决1和2两个问题，但是如果物理地址空间上没有一串足够大的连续内存，这时怎么办呢？
 </p>
 
+<p>
+为了方便管理，以页的方式来管理内存空间，在虚拟地址和物理地址映射时，最小单位为一页。如果要获取当前系统上的页的大小，可以使用如下方式
+</p>
+<div class="org-src-container">
+<pre class="src src-bash">getconf PAGESIZE
+</pre>
+</div>
+
+<pre class="example">
+4096
+
+</pre>
+
+<p>
+假如在32位系统上，4GB的虚拟地址空间，如果按4KB页大小去划分的话，需要有4GB/4KB=1M个页，假设存储的索引使用uint32，4bytes，则总共需要4MB的空间来存储页表。
+</p>
+
+
+<div class="figure">
+<p><img src="../images/1_level_page_table.png" alt="1_level_page_table.png" />
+</p>
+</div>
+
+
+<p>
+为了减少页表所占用的内存，采用多级页表机制，以二级页表为例，第一级页表覆盖4MB的空间，使用4GB/4MB=1K个页表即可表示。
+对于每个一级页表所指向的4MB空间，再划分成N个4KB个二级页表，N=4MB/4KB=1K
+</p>
+
+
+<div class="figure">
+<p><img src="../images/2_level_page_talbe.png" alt="2_level_page_talbe.png" />
+</p>
+</div>
+
+<p>
+一级页表共2<sup>10</sup>个，所以使用uint16就足以存储一级页表的索引，那一级页表所使用空间为1K*2B=2KB，同理二级页表所使用空间为1K*1K*2B=2MB。
+但由于二级页表可以按需创建，例如我整个进程只使用了100MB的空间，那完全没必要把整个4GB的二级页表都分配好。这样，一个进程的页表所占空间就减少到2KB，再按需动态往上增加，最多2.002MB
+</p>
 
 
 <div id="disqus_thread"></div>
@@ -150,7 +189,7 @@ for the JavaScript code in this tag.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2021-11-30 二 23:35</p>
+<p class="date">Created: 2021-12-05 日 00:20</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
